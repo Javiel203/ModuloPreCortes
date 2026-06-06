@@ -457,10 +457,10 @@ namespace IVisionPrecutDocs
                                 0,
                                 1));
                         Zone zone = new Zone(
-                            idZone.ToString(), 
+                            idZone.ToString(),
                             docActual.Cat,
-                            nameLabel, 
-                            obj.ToList(), 
+                            nameLabel,
+                            obj.ToList(),
                             Color.Green,
                             0,
                             0,

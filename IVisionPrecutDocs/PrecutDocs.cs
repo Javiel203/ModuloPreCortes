@@ -450,10 +450,11 @@ namespace IVisionPrecutDocs
                                 0,
                                 0,
                                 PointsToWKT(PixelesAListaPuntos(
-                                    obj,paginaActual.PagewidthPX,
+                                    obj, paginaActual.PagewidthPX,
                                     paginaActual.PageheightPX,
-                                    paginaActual.PagewidthPoints,
-                                    paginaActual.PageheightPoints),paginaActual.PageheightPoints),
+                                    paginaActual.PagewidthPX,
+                                    paginaActual.PageheightPX), paginaActual.PageheightPX),
+                                //PointsToWKT(obj, paginaActual.PageheightPX),
                                 0,
                                 1));
                         Zone zone = new Zone(
@@ -595,8 +596,8 @@ namespace IVisionPrecutDocs
             foreach (var p in puntosProcesar)
             {
                 // Convertimos a int (esto trunca o redondea los decimales)
-                int xFinal = (int)(p.X * factorX);
-                int yFinal = (int)(p.Y * factorY);
+                int xFinal = (int)Math.Round(p.X * factorX); ;
+                int yFinal = (int)Math.Round(altoTotalPt - (p.Y * factorY));
 
                 listaResultado.Add(new System.Drawing.Point(xFinal, yFinal));
             }

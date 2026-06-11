@@ -1,4 +1,7 @@
-﻿using DevExpress.Office.Utils;
+﻿using Apache.NMS;
+using Apache.NMS.ActiveMQ;
+using Apache.NMS.ActiveMQ.Commands;
+using DevExpress.Office.Utils;
 using DevExpress.XtraRichEdit.Layout;
 using DevExpress.XtraSplashScreen;
 using IVisionPrecutDocs.Data;
@@ -16,6 +19,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace IVisionPrecutDocs
 {
@@ -66,20 +70,27 @@ namespace IVisionPrecutDocs
                             {
 
                                 //MessageBox.Show($"pg: {elemento.Item1} | Nombre: {elemento.Item2} | Nombre2: {elemento.Item3}  | alto: {elemento.Item4} | ancho: {elemento.Item5} | dpi: {elemento.Item6}");
-                                new Inserts().InsertPage(
-                                    fkDoc,
-                                    elemento.Item1,
-                                    1,
-                                    elemento.Item2,
-                                    $"X:\\BIGDATA\\Metadata\\docs\\{cbAnio.SelectedItem.ToString()}\\{cbMes.SelectedItem.ToString()}\\{cbDia.SelectedItem.ToString()}\\{nameCat}\\Miniaturas\\",
-                                    elemento.Item3,
-                                    elemento.Item4,
-                                    elemento.Item5,
-                                    elemento.Item6,
-                                    0,
-                                    "",
-                                    0
-                                    );
+                                int idPg = new Inserts().InsertPage(
+                                     fkDoc,
+                                     elemento.Item1,
+                                     1,
+                                     elemento.Item2,
+                                     $"X:\\BIGDATA\\Metadata\\docs\\{cbAnio.SelectedItem.ToString()}\\{cbMes.SelectedItem.ToString()}\\{cbDia.SelectedItem.ToString()}\\{nameCat}\\Miniaturas\\",
+                                     elemento.Item3,
+                                     elemento.Item4,
+                                     elemento.Item5,
+                                     elemento.Item6,
+                                     0,
+                                     "",
+                                     0,
+                                     ConvertirPixelesAPuntos(elemento.Item5, elemento.Item6),
+                                     ConvertirPixelesAPuntos(elemento.Item4, elemento.Item6)
+                                     );
+                                if (idPg>0)
+                                {
+                                    SendMQ(idPg.ToString());
+                                }
+                                
                             }
                         }
                         else
@@ -97,6 +108,55 @@ namespace IVisionPrecutDocs
                 MessageBox.Show("Error al insertar documento");
             }
             
+        }
+
+
+        public int ConvertirPixelesAPuntos(int pixels, int dpi)
+        {
+            if (dpi <= 0)
+            {
+                return 0; // Retorna 0 por defecto, igual que tu base de datos
+            }
+            double puntos = (pixels * 72.0) / dpi;
+            return (int)Math.Round(puntos, MidpointRounding.AwayFromZero);
+            
+        }
+
+        private static IConnection connection;
+        private static ISession session;
+        private static IMessageProducer producer;
+        private void SendMQ(string sms)
+        {
+            Uri connecturi = new Uri(GetDataXml("ServerQueue"));
+            ConnectionFactory connectionFactory = new ConnectionFactory(connecturi);
+            connection = connectionFactory.CreateConnection();
+            connection.Start();
+            session = connection.CreateSession(AcknowledgementMode.AutoAcknowledge);
+            IDestination destination = session.GetQueue(GetDataXml("QueueGet"));
+            producer = session.CreateProducer(destination);
+            producer.DeliveryMode = MsgDeliveryMode.NonPersistent;
+            ITextMessage message = session.CreateTextMessage(sms);
+            producer.Send(message);
+        }
+
+        public static string GetDataXml(string nodo)
+        {
+            string xmlFilePath = (System.Reflection.Assembly.GetExecutingAssembly().Location).Replace("IVisionPrecutDocs.dll", "") + "conexion.xml";
+            XmlDocument xmlDoc = new XmlDocument();
+            string data = "";
+            xmlDoc.Load(xmlFilePath);
+            XmlElement root = xmlDoc.DocumentElement;
+            XmlNode conexionNode = root.SelectSingleNode("config");
+            if (conexionNode != null)
+            {
+                XmlNode datoNode = conexionNode.SelectSingleNode(nodo);
+                if (datoNode != null)
+                {
+                    data = datoNode.InnerText;
+                }
+
+            }
+            return data;
         }
 
         private void ObtenerDatosImagen(string ruta)

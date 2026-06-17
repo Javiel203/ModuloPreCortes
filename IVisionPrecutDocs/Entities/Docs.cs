@@ -13,9 +13,9 @@ namespace IVisionPrecutDocs.Entities
         public int FK_cat { get; set; }
         public DateTime dateInclude { get; set; }
         public string Cat { get; set; }
-        //public int TotalPages { get; set; }
-        //public int TotalPagesIA { get; set; }
-        //public int TotalPagesOCR { get; set; }
-        //public double TotalTimePaddle { get; set; }
+        public int TotalPages { get; set; }
+        public int TotalPagesOCR { get; set; }
+        public long TotalTimeOCR { get; set; }
+        
     }
 }

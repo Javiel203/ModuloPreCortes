@@ -19,7 +19,7 @@ namespace IVisionPrecutDocs.Data
                 using (SqlConnection cn = new SqlConnection(con))
                 {
                     const string sql = @"
-                    UPDATE [MetaDocs].[dbo].[Pages]
+                    UPDATE [RevistasIA].[docs].[Pages]
                     SET [taskPagePrecutbyIA] = @taskPagePrecutbyIA
                     WHERE FK_doc = @Id;";
 
@@ -65,7 +65,7 @@ namespace IVisionPrecutDocs.Data
                 using (SqlConnection cn = new SqlConnection(con))
                 {
                     const string sql = @"
-                    UPDATE [MetaDocs].[dbo].[Pages]
+                    UPDATE [RevistasIA].[docs].[Pages]
                     SET [taskPagePrecutbyOCR] = @taskPagePrecutbyOCR
                     WHERE FK_doc = @Id;";
 
@@ -88,7 +88,7 @@ namespace IVisionPrecutDocs.Data
                 using (SqlConnection cn = new SqlConnection(con))
                 {
                     const string sql = @"
-                    UPDATE [MetaDocs].[dbo].[LabelDoc]
+                    UPDATE [RevistasIA].[docs].[LabelDoc]
                     SET namelabel = @NameLabel
                     WHERE PK_LabelDoc = @Id;";
 
@@ -111,7 +111,7 @@ namespace IVisionPrecutDocs.Data
                 using (SqlConnection cn = new SqlConnection(con))
                 {
                     const string sql = @"
-                    UPDATE [MetaObject].[dbo].[ObjectMaster]
+                    UPDATE [RevistasIA].[obj].[ObjectMaster]
                     SET nameObject = @nameObject
                     WHERE PK_ObjectMaster = @Id;";
 
@@ -134,7 +134,7 @@ namespace IVisionPrecutDocs.Data
                 using (SqlConnection cn = new SqlConnection(con))
                 {
                     const string sql = @"
-                    UPDATE [MetaObject].[dbo].[ObjectMaster]
+                    UPDATE [RevistasIA].[obj].[ObjectMaster]
                     SET active = @active
                     WHERE PK_ObjectMaster = @Id;";
 
@@ -179,7 +179,7 @@ namespace IVisionPrecutDocs.Data
                 using (SqlConnection cn = new SqlConnection(con))
                 {
                     const string sql = @"
-                    UPDATE [MetaDocs].[dbo].[PagePrecrop]
+                    UPDATE [RevistasIA].[docs].[PagePrecrop]
                     SET [fileNameCrop] = @fileNameCrop,
                         [FK_LabelDoc] = @FK_LabelDoc                 
                     WHERE [PK_PagePrecrop] = @Id;";
@@ -202,7 +202,7 @@ namespace IVisionPrecutDocs.Data
                 using (SqlConnection cn = new SqlConnection(con))
                 {
                     const string sql = @"
-                    UPDATE [MetaObject].[dbo].[ObjectsLayers]
+                    UPDATE [RevistasIA].[obj].[ObjectsLayers]
                     SET [dirObject] = @dirObject,
                         [dirObjectMini] = @dirObjectMini,
                         [FK_ObjectMaster] = @FK_ObjectMaster
@@ -226,7 +226,7 @@ namespace IVisionPrecutDocs.Data
                 using (SqlConnection cn = new SqlConnection(con))
                 {
                     const string sql = @"
-                    UPDATE [MetaDocs].[dbo].[PagePrecrop]
+                    UPDATE [RevistasIA].[docs].[PagePrecrop]
                     SET [FK_ObjectsLayer] = @FK_ObjectsLayer,
                     [PrecropPointsValidation] = 1
                     WHERE [PK_PagePrecrop] = @PK_PagePrecrop;";

@@ -516,63 +516,7 @@ namespace IVisionPrecutDocs
 
 
 
-        //public byte[] PixelesABytesWKB(
-        //List<System.Drawing.Point> listaPuntosPx,
-        //double anchoTotalPx,
-        //double altoTotalPx,
-        //double anchoTotalPt,
-        //double altoTotalPt)
-        //{
-        //    // 1. Validaciones
-        //    if (listaPuntosPx == null || listaPuntosPx.Count < 3) return null;
-
-        //    // --- PASO CRÍTICO: CERRAR EL POLÍGONO ---
-        //    // Para que sea un polígono sólido, debe terminar donde empezó.
-        //    // Creamos una copia para no modificar la lista original fuera de la función.
-        //    var puntosProcesar = new List<System.Drawing.Point>(listaPuntosPx);
-
-        //    if (puntosProcesar[0] != puntosProcesar[puntosProcesar.Count - 1])
-        //    {
-        //        puntosProcesar.Add(puntosProcesar[0]); // Repetimos el primer punto al final
-        //    }
-
-        //    // 2. Factores de escala
-        //    double factorX = anchoTotalPt / anchoTotalPx;
-        //    double factorY = altoTotalPt / altoTotalPx;
-
-        //    using (var ms = new MemoryStream())
-        //    using (var writer = new BinaryWriter(ms))
-        //    {
-        //        // --- FORMATO WKB PARA POLYGON ---
-
-        //        // A. Byte Order (1 byte): Little Endian
-        //        writer.Write((byte)1);
-
-        //        // B. Tipo de Geometría (4 bytes): 3 = POLYGON
-        //        // (Antes usábamos 2 para LineString)
-        //        writer.Write((int)3);
-
-        //        // C. Cantidad de Anillos (4 bytes): 1
-        //        // Un polígono simple tiene 1 anillo exterior. 
-        //        // (Si tuviera agujeros en medio, serían más anillos).
-        //        writer.Write((int)1);
-
-        //        // D. Cantidad de Puntos en el anillo (4 bytes)
-        //        writer.Write((int)puntosProcesar.Count);
-
-        //        // E. Escribir los puntos escalados
-        //        foreach (var p in puntosProcesar)
-        //        {
-        //            double xFinal = p.X * factorX;
-        //            double yFinal = p.Y * factorY;
-
-        //            writer.Write(xFinal);
-        //            writer.Write(yFinal);
-        //        }
-
-        //        return ms.ToArray();
-        //    }
-        //}
+       
 
         public List<System.Drawing.Point> PixelesAListaPuntos(
         List<System.Drawing.Point> listaPuntosPx,
@@ -765,6 +709,7 @@ namespace IVisionPrecutDocs
             lblCIA.Text = counterIA.ToString();
             lblCM.Text = counterM.ToString();
             lblCO.Text = counterO.ToString();
+            
         }
 
         private void Gallery_ItemDoubleClick(object sender, GalleryItemClickEventArgs e)
@@ -819,7 +764,8 @@ namespace IVisionPrecutDocs
         {
             gridView2.CustomColumnDisplayText += GridView2_CustomColumnDisplayText;
             //draw2.Enabled = true;
-            
+            lblCO.Visible = false;
+            labelControl3.Visible = false;
             gridView1.OptionsView.ShowGroupPanel = false;
             FormatGridControl2();
             dateEdit1.DateTime = new DateTime(2025,12,01);
@@ -1081,28 +1027,26 @@ namespace IVisionPrecutDocs
                 gridView1.Columns["Cat"].OptionsColumn.FixedWidth = true;
                 gridView1.Columns["Cat"].OptionsColumn.AllowSize = false;
                 gridView1.Columns["Cat"].Width = 150;
-                //gridView1.Columns["TotalPages"].OptionsColumn.AllowEdit = false;
-                //gridView1.Columns["TotalPages"].OptionsColumn.FixedWidth = true;
-                //gridView1.Columns["TotalPages"].OptionsColumn.AllowSize = false;
-                //gridView1.Columns["TotalPages"].Width = 30;
-                //gridView1.Columns["TotalPagesIA"].OptionsColumn.AllowEdit = false;
-                //gridView1.Columns["TotalPagesIA"].OptionsColumn.FixedWidth = true;
-                //gridView1.Columns["TotalPagesIA"].OptionsColumn.AllowSize = false;
-                //gridView1.Columns["TotalPagesIA"].Width = 30;
-                //gridView1.Columns["TotalPagesOCR"].OptionsColumn.AllowEdit = false;
-                //gridView1.Columns["TotalPagesOCR"].OptionsColumn.FixedWidth = true;
-                //gridView1.Columns["TotalPagesOCR"].OptionsColumn.AllowSize = false;
-                //gridView1.Columns["TotalPagesOCR"].Width = 30;
-                //gridView1.Columns["TotalTimePaddle"].OptionsColumn.AllowEdit = false;
-                //gridView1.Columns["TotalTimePaddle"].OptionsColumn.FixedWidth = true;
-                //gridView1.Columns["TotalTimePaddle"].OptionsColumn.AllowSize = false;
-                //gridView1.Columns["TotalTimePaddle"].Width = 120;
+                gridView1.Columns["TotalPages"].OptionsColumn.AllowEdit = false;
+                gridView1.Columns["TotalPages"].OptionsColumn.FixedWidth = true;
+                gridView1.Columns["TotalPages"].OptionsColumn.AllowSize = false;
+                gridView1.Columns["TotalPages"].Width = 30;
+                gridView1.Columns["TotalPagesOCR"].OptionsColumn.AllowEdit = false;
+                gridView1.Columns["TotalPagesOCR"].OptionsColumn.FixedWidth = true;
+                gridView1.Columns["TotalPagesOCR"].OptionsColumn.AllowSize = false;
+                gridView1.Columns["TotalPagesOCR"].Width = 40;
+                gridView1.Columns["TotalTimeOCR"].OptionsColumn.AllowEdit = false;
+                gridView1.Columns["TotalTimeOCR"].OptionsColumn.FixedWidth = true;
+                gridView1.Columns["TotalTimeOCR"].OptionsColumn.AllowSize = false;
+                gridView1.Columns["TotalTimeOCR"].Width = 100;
+
+
                 gridView1.Columns["NItem"].Caption = "Nº";
                 gridView1.Columns["Cat"].Caption = "Categoria";
-                //gridView1.Columns["TotalPages"].Caption = "Pg";
-                //gridView1.Columns["TotalPagesIA"].Caption = "IA";
-                //gridView1.Columns["TotalPagesOCR"].Caption = "OCR";
-                //gridView1.Columns["TotalTimePaddle"].Caption = "TO";
+                gridView1.Columns["TotalPages"].Caption = "Pg";
+                gridView1.Columns["TotalPagesOCR"].Caption = "Or";
+                gridView1.Columns["TotalTimeOCR"].Caption = "TO";
+
             }
             else
             {

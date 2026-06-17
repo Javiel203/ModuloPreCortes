@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,5 +25,7 @@ namespace IVisionPrecutDocs.Entities
         public int PageheightPoints { get; set; }
         public int PagewidthPoints { get; set; }
         public int dpi { get; set; }
+        //public int taskPageOcr { get; set; }
+        //public long processTime { get; set; }
     }
 }

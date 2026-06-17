@@ -149,7 +149,7 @@ namespace IVisionPrecutDocs.Data
                 
                 using (SqlConnection cn = new SqlConnection(conexion))
                 {
-                    string squery = string.Format("select [PK_Page]  from  [MetaDocs].[dbo].[Pages] where FK_doc ={0}", fk_Doc);
+                    string squery = string.Format("select [PK_Page]  from  [RevistasIA].[docs].[Pages] where FK_doc ={0}", fk_Doc);
                     lista = cn.Query<int>(squery, null, null, true, 0, CommandType.Text).ToList();
                 }
                 return lista;
@@ -185,8 +185,8 @@ namespace IVisionPrecutDocs.Data
                         pp.[precorteOCR],
                         pp.[PrecropPointsValidation]
                          
-                    FROM [MetaDocs].[dbo].[PagePrecrop] pp
-                    INNER JOIN [MetaDocs].[dbo].[LabelDoc] ld
+                    FROM [RevistasIA].[docs].[PagePrecrop] pp
+                    INNER JOIN [RevistasIA].[docs].[LabelDoc]ld
                     ON pp.[FK_LabelDoc] = ld.[PK_LabelDoc]
                     WHERE pp.[FK_Page] = @date;";
 
@@ -203,42 +203,7 @@ namespace IVisionPrecutDocs.Data
             }
         }
 
-        //public List<Docs> GetDocs(DateTime fechaBusqueda)
-        //{
-        //    try
-        //    {
-        //        List<Docs> lista = new List<Docs>();
-        //        using (SqlConnection cn = new SqlConnection(conexion))
-        //        {
-        //            //string squery = string.Format("select ROW_NUMBER () over (order by Pk_Doc desc) 'NItem', * from [MetaDocs].[dbo].[Docs] d inner join [sysCloud].[dbo].[Cats] c on (d.FK_cat=c.PK_cat) where convert (date, d.dateInclude)=@date");
-        //            const string squery = @"
-        //            SELECT
-        //            ROW_NUMBER() OVER (ORDER BY d.Pk_Doc DESC) AS NItem,
-        //            d.Pk_Doc,
-        //            d.FK_cat,
-        //            d.dateInclude,
-        //            c.Cat AS Cat,  -- ajusta al nombre real de la columna en Cats
-        //            (SELECT COUNT(*) FROM [MetaDocs].[dbo].[Pages] p WHERE p.FK_doc = d.Pk_Doc) AS TotalPages,
-        //            (SELECT COUNT(*) FROM [MetaDocs].[dbo].[Pages] p WHERE p.FK_doc = d.Pk_Doc AND taskPagePrecutbyIA > 0) AS TotalPagesIA,
-        //            (SELECT COUNT(*) FROM [MetaDocs].[dbo].[Pages] p WHERE p.FK_doc = d.Pk_Doc AND taskPagePrecutbyOCR > 0) AS TotalPagesOCR,
-        //            CAST (ISNULL((SELECT SUM(p.processTimePaddle) FROM [MetaDocs].[dbo].[Pages] p WHERE p.FK_doc = d.Pk_Doc AND taskPagePrecutbyOCR > 0),0) / 60000.0 AS DECIMAL(10,2)) AS TotalTimePaddle
-        //            FROM [MetaDocs].[dbo].[Docs] d
-        //            INNER JOIN [sysCloud].[dbo].[Cats] c
-        //            ON d.FK_cat = c.PK_cat
-        //            WHERE CONVERT(date, d.dateInclude) = @date;";
-
-        //            var parametros = new DynamicParameters();
-        //            parametros.Add("@date", fechaBusqueda.Date);
-        //            lista = cn.Query<Docs>(squery, parametros, null, true, 0, CommandType.Text).ToList();
-        //        }
-        //        return lista;
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //        return null;
-        //    }
-        //}
+        
 
         public List<Docs> GetDocs(DateTime fechaBusqueda)
         {
@@ -249,16 +214,19 @@ namespace IVisionPrecutDocs.Data
                 {
                     //string squery = string.Format("select ROW_NUMBER () over (order by Pk_Doc desc) 'NItem', * from [MetaDocs].[dbo].[Docs] d inner join [sysCloud].[dbo].[Cats] c on (d.FK_cat=c.PK_cat) where convert (date, d.dateInclude)=@date");
                     const string squery = @"
-                    SELECT
-                    ROW_NUMBER() OVER (ORDER BY d.Pk_Doc DESC) AS NItem,
-                    d.Pk_Doc,
-                    d.FK_cat,
-                    d.dateInclude,
-                    c.Cat AS Cat  -- ajusta al nombre real de la columna en Cats                   
-                    FROM [RevistasIA].[docs].[Docs] d
-                    INNER JOIN [RevistasIA].[core].[Cats] c
-                    ON d.FK_cat = c.PK_cat
-                    WHERE CONVERT(date, d.dateInclude) = @date;";
+	                     SELECT
+                         ROW_NUMBER() OVER (ORDER BY d.Pk_Doc DESC) AS NItem,
+                         d.Pk_Doc,
+                         d.FK_cat,
+                         d.dateInclude,
+                         c.Cat AS Cat,  -- ajusta al nombre real de la columna en Cats  
+                         (SELECT COUNT(*) FROM [RevistasIA].[docs].[Pages] p WHERE p.FK_doc = d.Pk_Doc) AS TotalPages,
+                         (SELECT COUNT(*) FROM [RevistasIA].[docs].[Pages] p WHERE p.FK_doc = d.Pk_Doc AND p.taskPageOcr > 0) AS TotalPagesOCR,
+                         CAST (ISNULL((SELECT SUM(p.processTime) FROM [RevistasIA].[docs].[Pages] p WHERE p.FK_doc = d.Pk_Doc AND taskPageOcr > 0),0) /60000.0 AS DECIMAL(10,2)) AS TotalTimeOCR
+                         FROM [RevistasIA].[docs].[Docs] d
+                         INNER JOIN [RevistasIA].[core].[Cats] c
+                         ON d.FK_cat = c.PK_cat
+                         WHERE CONVERT(date, d.dateInclude) = @date;";
                     var parametros = new DynamicParameters();
                     parametros.Add("@date", fechaBusqueda.Date);
                     lista = cn.Query<Docs>(squery, parametros, null, true, 0, CommandType.Text).ToList();
@@ -279,7 +247,7 @@ namespace IVisionPrecutDocs.Data
                 Docs doc = new Docs();
                 using (SqlConnection cn = new SqlConnection(conexion))
                 {
-                    string squery = string.Format("SELECT  *  FROM [MetaDocs].[dbo].[Docs] where [Pk_Doc]={0} ", pkDoc);
+                    string squery = string.Format("SELECT  *  FROM [RevistasIA].[docs].[Docs] where [Pk_Doc]={0} ", pkDoc);
                     doc = cn.QueryFirst<Docs>(squery, null, null, 0, CommandType.Text);
                 }
                 return doc;
@@ -333,7 +301,7 @@ namespace IVisionPrecutDocs.Data
                         ProcessbyIA,
                         ProcessIAscore,
                         PolyGeometryPoints.STAsBinary() as PolyGeometryPoints
-                FROM [MetaDocs].[dbo].[PagePrecrop]
+                FROM [RevistasIA].[docs].[PagePrecrop]
                 WHERE PK_PagePrecrop = @id;";
 
                 return cn.QueryFirstOrDefault<PagePrecrop>(sql, new { id });
@@ -395,7 +363,7 @@ namespace IVisionPrecutDocs.Data
                         ProcessbyIA,
                         ProcessIAscore,
                         PolyGeometryPoints.STAsBinary() as PolyGeometryPoints
-                        FROM [MetaDocs].[dbo].[PagePrecrop] 
+                        FROM [RevistasIA].[docs].[PagePrecrop]
                         WHERE FK_LabelDoc = @fk AND FK_ObjectsLayer > 0                  
                         ORDER BY PK_PagePrecrop DESC;";
                     }
@@ -418,7 +386,7 @@ namespace IVisionPrecutDocs.Data
                         ProcessbyIA,
                         ProcessIAscore,
                         PolyGeometryPoints.STAsBinary() as PolyGeometryPoints
-                        FROM [MetaDocs].[dbo].[PagePrecrop] 
+                        FROM [RevistasIA].[docs].[PagePrecrop]
                         WHERE FK_LabelDoc = @fk                   
                         ORDER BY PK_PagePrecrop DESC;";
                     }
@@ -441,7 +409,7 @@ namespace IVisionPrecutDocs.Data
                         ProcessbyIA,
                         ProcessIAscore,
                         PolyGeometryPoints.STAsBinary() as PolyGeometryPoints
-                        FROM [MetaDocs].[dbo].[PagePrecrop] 
+                        FROM [RevistasIA].[docs].[PagePrecrop]
                         WHERE FK_LabelDoc = @fk AND precorteOCR = 1                  
                         ORDER BY PK_PagePrecrop DESC;";                       
                     }
@@ -464,7 +432,7 @@ namespace IVisionPrecutDocs.Data
                         ProcessbyIA,
                         ProcessIAscore,
                         PolyGeometryPoints.STAsBinary() as PolyGeometryPoints
-                        FROM [MetaDocs].[dbo].[PagePrecrop] 
+                        FROM [RevistasIA].[docs].[PagePrecrop]
                         WHERE FK_LabelDoc = @fk AND ProcessbyIA = {filter} AND precorteOCR = 0                  
                         ORDER BY PK_PagePrecrop DESC;";
                     }
@@ -490,7 +458,7 @@ namespace IVisionPrecutDocs.Data
                     //string squery = string.Format("select *  from  [MetaDocs].[dbo].[PagePrecrop] where FK_LabelDoc ={0}", pk);
                     const string squery = @"
                     SELECT *
-                    FROM [MetaDocs].[dbo].[PagePrecrop]
+                    FROM [RevistasIA].[docs].[PagePrecrop]
                     WHERE FK_LabelDoc = @fk;
                     ";
 
@@ -551,7 +519,7 @@ namespace IVisionPrecutDocs.Data
                
                 using (SqlConnection cn = new SqlConnection(conexion))
                 {
-                    string squery = string.Format("SELECT  *  FROM [MetaObject].[dbo].[ObjectsLayers] where PK_ObjectsLayer={0} ", fK);
+                    string squery = string.Format("SELECT  *  FROM [RevistasIA].[obj].[ObjectsLayers] where PK_ObjectsLayer={0} ", fK);
                     objectsLayers = cn.QueryFirst<ObjectsLayers>(squery, null, null, 0, CommandType.Text);
                 }
                 return objectsLayers;
@@ -571,7 +539,7 @@ namespace IVisionPrecutDocs.Data
                 
                 using (SqlConnection cn = new SqlConnection(conexion))
                 {
-                    string squery = string.Format("SELECT  *  FROM [MetaDocs].[dbo].[Pages] where PK_Page={0} ", pk_page);
+                    string squery = string.Format("SELECT  *  FROM [RevistasIA].[docs].[Pages] where PK_Page={0} ", pk_page);
                     paginas = cn.QueryFirst<Paginas>(squery, null, null, 0, CommandType.Text);
                 }
                 return paginas;
@@ -591,7 +559,7 @@ namespace IVisionPrecutDocs.Data
 
                 using (SqlConnection cn = new SqlConnection(conexion))
                 {
-                    string squery = string.Format("SELECT  *  FROM [MetaDocs].[dbo].[LabelDoc] where PK_LabelDoc={0} ", PK_LabelDoc);
+                    string squery = string.Format("SELECT  *  FROM [RevistasIA].[docs].[LabelDoc] where PK_LabelDoc={0} ", PK_LabelDoc);
                     ldoc = cn.QueryFirst<LabelDoc>(squery, null, null, 0, CommandType.Text);
                 }
                 return ldoc;
@@ -642,7 +610,7 @@ namespace IVisionPrecutDocs.Data
                 LabelDoc ld = new LabelDoc();
                 using (SqlConnection cn = new SqlConnection(conexion))
                 {
-                    string squery = string.Format("SELECT  *  FROM [MetaDocs].[dbo].[LabelDoc] where FK_ObjectMaster={0} ", FK_ObjectMaster);
+                    string squery = string.Format("SELECT  *  FROM [RevistasIA].[docs].[LabelDoc] where FK_ObjectMaster={0} ", FK_ObjectMaster);
                     ld = cn.QueryFirst<LabelDoc>(squery, null, null, 0, CommandType.Text);
                 }
                 return ld;
@@ -660,7 +628,7 @@ namespace IVisionPrecutDocs.Data
             {
                 var squery = @"
                 select p.*
-                from MetaDocs.dbo.PagePrecrop p
+                from [RevistasIA].[docs].[PagePrecrop] p
                 cross apply (
                 select cast(p.PolyGeometryPoints as geometry).MakeValid() as geom
                 ) g

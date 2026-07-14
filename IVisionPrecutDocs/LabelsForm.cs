@@ -391,6 +391,8 @@ namespace IVisionPrecutDocs
             gridView1.Columns["FK_doc"].Visible = false;
             gridView1.Columns["FK_ObjectMaster"].Visible = false;
             gridView1.Columns["FK_ObjectGroup"].Visible = false;
+            gridView1.Columns["CatImgOcr"].Visible = false;
+            
             gridView1.Columns["namelabel"].OptionsColumn.AllowEdit = false;
             gridView1.Columns["namelabel"].OptionsColumn.FixedWidth = true;
             gridView1.Columns["namelabel"].OptionsColumn.AllowSize = false;
@@ -416,11 +418,11 @@ namespace IVisionPrecutDocs
             gridView1.Columns["CatImgNoIa"].OptionsColumn.AllowSize = false;
             gridView1.Columns["CatImgNoIa"].Width = 70;
             gridView1.Columns["CatImgNoIa"].Caption = "IMGNoIA";
-            gridView1.Columns["CatImgOcr"].OptionsColumn.AllowEdit = false;
-            gridView1.Columns["CatImgOcr"].OptionsColumn.FixedWidth = true;
-            gridView1.Columns["CatImgOcr"].OptionsColumn.AllowSize = false;
-            gridView1.Columns["CatImgOcr"].Width = 70;
-            gridView1.Columns["CatImgOcr"].Caption = "IMGOcr";
+            //gridView1.Columns["CatImgOcr"].OptionsColumn.AllowEdit = false;
+            //gridView1.Columns["CatImgOcr"].OptionsColumn.FixedWidth = true;
+            //gridView1.Columns["CatImgOcr"].OptionsColumn.AllowSize = false;
+            //gridView1.Columns["CatImgOcr"].Width = 70;
+            //gridView1.Columns["CatImgOcr"].Caption = "IMGOcr";
             gridView1.Columns["CatApproved"].OptionsColumn.AllowEdit = false;
             gridView1.Columns["CatApproved"].OptionsColumn.FixedWidth = true;
             gridView1.Columns["CatApproved"].OptionsColumn.AllowSize = false;

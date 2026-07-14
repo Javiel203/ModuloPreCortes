@@ -222,7 +222,9 @@ namespace IVisionPrecutDocs.Data
                          c.Cat AS Cat,  -- ajusta al nombre real de la columna en Cats  
                          (SELECT COUNT(*) FROM [RevistasIA].[docs].[Pages] p WHERE p.FK_doc = d.Pk_Doc) AS TotalPages,
                          (SELECT COUNT(*) FROM [RevistasIA].[docs].[Pages] p WHERE p.FK_doc = d.Pk_Doc AND p.taskPageOcr > 0) AS TotalPagesOCR,
-                         CAST (ISNULL((SELECT SUM(p.processTime) FROM [RevistasIA].[docs].[Pages] p WHERE p.FK_doc = d.Pk_Doc AND taskPageOcr > 0),0) /60000.0 AS DECIMAL(10,2)) AS TotalTimeOCR
+                         CAST (ISNULL((SELECT SUM(p.processTime) FROM [RevistasIA].[docs].[Pages] p WHERE p.FK_doc = d.Pk_Doc AND taskPageOcr > 0),0) /60000.0 AS DECIMAL(10,2)) AS TotalTimeOCR,
+                         (SELECT COUNT(*) FROM [RevistasIA].[docs].[Pages] p WHERE p.FK_doc = d.Pk_Doc AND p.taskPagePrecutbyIA > 0) AS TotalPagesIA,
+                         CAST (ISNULL((SELECT SUM(p.processTimeIA) FROM [RevistasIA].[docs].[Pages] p WHERE p.FK_doc = d.Pk_Doc AND taskPagePrecutbyIA > 0),0) /60000.0 AS DECIMAL(10,2)) AS TotalTimeIA
                          FROM [RevistasIA].[docs].[Docs] d
                          INNER JOIN [RevistasIA].[core].[Cats] c
                          ON d.FK_cat = c.PK_cat

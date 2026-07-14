@@ -16,6 +16,8 @@ namespace IVisionPrecutDocs.Entities
         public int TotalPages { get; set; }
         public int TotalPagesOCR { get; set; }
         public long TotalTimeOCR { get; set; }
-        
+        public int TotalPagesIA { get; set; }
+        public long TotalTimeIA { get; set; }
+
     }
 }

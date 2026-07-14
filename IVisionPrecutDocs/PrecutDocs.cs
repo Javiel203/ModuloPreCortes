@@ -947,7 +947,7 @@ namespace IVisionPrecutDocs
                 gridView1.Columns["Cat"].OptionsColumn.AllowEdit = false;
                 gridView1.Columns["Cat"].OptionsColumn.FixedWidth = true;
                 gridView1.Columns["Cat"].OptionsColumn.AllowSize = false;
-                gridView1.Columns["Cat"].Width = 150;
+                gridView1.Columns["Cat"].Width = 120;
                 gridView1.Columns["TotalPages"].OptionsColumn.AllowEdit = false;
                 gridView1.Columns["TotalPages"].OptionsColumn.FixedWidth = true;
                 gridView1.Columns["TotalPages"].OptionsColumn.AllowSize = false;
@@ -959,7 +959,15 @@ namespace IVisionPrecutDocs
                 gridView1.Columns["TotalTimeOCR"].OptionsColumn.AllowEdit = false;
                 gridView1.Columns["TotalTimeOCR"].OptionsColumn.FixedWidth = true;
                 gridView1.Columns["TotalTimeOCR"].OptionsColumn.AllowSize = false;
-                gridView1.Columns["TotalTimeOCR"].Width = 100;
+                gridView1.Columns["TotalTimeOCR"].Width = 50;
+                gridView1.Columns["TotalPagesIA"].OptionsColumn.AllowEdit = false;
+                gridView1.Columns["TotalPagesIA"].OptionsColumn.FixedWidth = true;
+                gridView1.Columns["TotalPagesIA"].OptionsColumn.AllowSize = false;
+                gridView1.Columns["TotalPagesIA"].Width = 40;
+                gridView1.Columns["TotalTimeIA"].OptionsColumn.AllowEdit = false;
+                gridView1.Columns["TotalTimeIA"].OptionsColumn.FixedWidth = true;
+                gridView1.Columns["TotalTimeIA"].OptionsColumn.AllowSize = false;
+                gridView1.Columns["TotalTimeIA"].Width = 50;
 
 
                 gridView1.Columns["NItem"].Caption = "Nº";
@@ -967,6 +975,8 @@ namespace IVisionPrecutDocs
                 gridView1.Columns["TotalPages"].Caption = "Pg";
                 gridView1.Columns["TotalPagesOCR"].Caption = "Or";
                 gridView1.Columns["TotalTimeOCR"].Caption = "TO";
+                gridView1.Columns["TotalPagesIA"].Caption = "IA";
+                gridView1.Columns["TotalTimeIA"].Caption = "TI";
 
             }
             else
